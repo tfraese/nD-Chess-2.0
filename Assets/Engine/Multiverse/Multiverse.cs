@@ -19,10 +19,10 @@ using UnityEngine;
  */
 
 /// <summary>
-/// Parent class for multiverse types. Moves are applied to the multiverse, and
-/// the multiverse handles changing boards and branching timelines.
+/// Parent class for multiverse types. Acts as wrapper for regular boards
+/// (singularity) and allows for timeline branching on other modes
 /// </summary>
-public class Multiverse : MonoBehaviour
+public class Multiverse
 {
-
+	
 }

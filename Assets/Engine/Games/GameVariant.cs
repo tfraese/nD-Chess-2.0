@@ -28,7 +28,7 @@ public class GameVariant : MonoBehaviour
 {
     int playerCount;
 
-    Board gameBoard;
+    BoardState gameBoard;
     BoardLayout boardLayout;
 
     int multiverseType;
