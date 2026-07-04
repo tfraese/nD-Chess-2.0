@@ -11,7 +11,7 @@ using UnityEngine;
 /// <summary>
 /// Strictly abstract class for representing current board state
 /// </summary>
-public class Board
+public class BoardState
 {
-	private BoardLayout layout;
+
 }
