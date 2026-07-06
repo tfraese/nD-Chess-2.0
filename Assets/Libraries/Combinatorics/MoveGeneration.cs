@@ -14,80 +14,99 @@ public static class MoveGeneration
 	/// <param name="n">Number of dimensions</param>
 	/// <param name="c">c-agonal of rider piece</param>
 	/// <returns></returns>
-	public static int[][] RiderDirections(int n, int c)
+    public static int[][] RiderDirections(int n, int c)
     {
-        /* 
-         * Generate a sequence of numbers. Each number in the sequence re-
-         * presents a dimension the rider is choosing to move along in that
-         * specific sequence. {1,3} (0 indexed) is {y, w}. To avoid choosing the
-         * same dimension twice, the number is unique. To avoid repeated combi-
-         * nations, the numbers are sequential.
-         */
-        int[][] sequentialCombinations = Combinatorics.CombinationsUniqueSequential(n, c);
-
-        /*
-         * Next we are generating a sequence of bitstrings of length c, in
-         * with batches of a count of 1's from 0 to c. These represent the sign
-         * of the 1st, 2nd,...,cth (1-indexed) 1 in the binary string.
-         * 
-         * Since this is equivalent to taking C(c,k) from 0 to k (i.e. all
-         * entries in pascal's triangle) the total number of options is the sum
-         * across the cth row of pascal's triangle: 2^c.
-         * 
-         * We could technically just count them up from 0 to (2^c - 1) in binary
-         * but this method organizes them, and its already implemented.
-         */
-        int bitstringLength = (1 << c);
-        int bitstringCount = 0;
-        int[][] bitstrings = new int[bitstringLength][];
-        for (int onesCount = 0; onesCount <= c; onesCount++)
+        if (c > n)
         {
-            int[][] bitstringsLocal = Combinatorics.BitString(c, onesCount);
-            for (int i = 0; i < bitstringsLocal.Length; i++)
-            {
-                bitstrings[bitstringCount] = (int[])bitstringsLocal[i].Clone();
-                bitstringCount++;
-            }
+            Debug.LogWarning($"Generating {c} rider for {n} < {c}, empty moveset created");
+            return new int[0][];
         }
 
-        /*
-         * Here we take a given sequence. Take the sequence {1,5} for example,
-         * with the bit string {0,1}
-         * 
-         * We take the 0th element in the sequence (1), and the 0th bit in the
-         * binary string. We mark the 1st (0-indexed) component of the output
-         * vector as positive because the bit is 0, and mark it as +1 because
-         * of the sequence element.
-         * 
-         * Next, we take the 1th sequence element (5) and the 2th bit (1). We
-         * mark this component negative because of the bit 1, and mark it -1
-         * because of the sequence element.
-         * 
-         * {1, 5} x {0, 1} = {0, 1, 0, 0, 0, -1, 0, 0, 0, 0...}
-         */
-        int directionLength = Combinatorics.Choose(n, c) * (1 << c);
-        int directionCount = 0;
-
-        int[][] directions = new int[directionLength][];
-        foreach (var sequence in sequentialCombinations)
+        // generate a list of c 1's
+        int[] ones = new int[c];
+        for (int i = 0; i < c; i++)
         {
-            foreach (var bitString in bitstrings)
-            {
-                directions[directionCount] = new int[n];
-                for (int i = 0; i < sequence.Length; i++)
-                {
-                    int sign = bitString[i] == 0 ? 1 : -1;
-                    directions[directionCount][sequence[i]] = sign * 1;
-                }
-                directionCount++;
-            }
+            ones[i] = 1;
         }
-        /*
-         * By taking all elements of the Sequences S and Bitstrings B we recieve
-         * S x B which is all directions a rider can move in the specified
-         * dimensions.
-         */
-        return directions;
+        int[][] onesWrapper = new int[][] { ones };
+
+        // generate all bitstrings of length c
+        int[][] bitstrings = Combinatorics.Bitstrings(c);
+
+		// sign the list of c 1's
+		int[][] signed = Combinatorics.Sign(onesWrapper, bitstrings);
+
+		// calculate number of zeros to inject into signed sequences
+		int zeroCount = n - c;
+
+        // if we dont need to inject any zeros just return the signed values
+        if (zeroCount == 0)
+        {
+            return signed;
+        }
+
+        // calculate all combinations of ways to pad zero into the spaces before
+        // after and between signed one's
+        int[][] injectionSequences = Combinatorics.CombinationsUniqueSequential(n, zeroCount);
+
+        // inject 0's into the sequence in all possible permutations to pad the
+        // vectors into n dimensions.
+		return Combinatorics.Inject(0, signed, injectionSequences);
     }
-    
+
+    /// <summary>
+    /// Generates all move vectors for a piece that can move any permutation of
+    /// provided offsets in any directions. Assumes vals are unique.
+    /// </summary>
+    public static int[][] Permutables(int n, int[] vals)
+    {
+        int[] freq = new int[vals.Length];
+        for (int i = 0; i < freq.Length; i++)
+        {
+            freq[i] = 1;
+        }
+        return Permutables(n, vals, freq);
+    }
+
+	/// <summary>
+	/// Generates all move vectors for a piece that can move any permutation of
+	/// provided offsets in any directions. Assumes vals are unique, accepts a 
+    /// frequency array.
+	/// </summary>
+	public static int[][] Permutables(int n, int[] vals, int[] freq)
+    {
+        // calculate the number of non-zero components based on the frequency
+        int c = 0;
+        for (int i = 0; i < freq.Length; i++)
+        {
+            c += freq[c];
+        }
+
+        // warn the console if we create an empty moveset
+		if (c > n)
+		{
+			Debug.LogWarning($"Generating {c} permutable for {n} < {c}, empty moveset created");
+			return new int[0][];
+		}
+
+        // permute the values given
+		int[][] permutations = Combinatorics.Permutations(vals, freq);
+
+        // generate bitstrings to sign them
+        int[][] bitstrings = Combinatorics.Bitstrings(c);
+
+        // sign the permutations
+		int[][] signed = Combinatorics.Sign(permutations, bitstrings);
+		
+        // calculate zero count to fill
+        int zeroCount = n - c;
+        if (zeroCount == 0) { return signed; }
+
+        // generate injection sequences
+        int[][] injectionSequences = Combinatorics.CombinationsUniqueSequential(n, zeroCount);
+
+        // inject the number of zeros needed to pad out to n dimensions
+        int[][] injected = Combinatorics.Inject(0, signed, injectionSequences);
+		return injected;
+	}
 }
