@@ -108,5 +108,38 @@ public static class MoveGeneration
         // inject the number of zeros needed to pad out to n dimensions
         int[][] injected = Combinatorics.Inject(0, signed, injectionSequences);
 		return injected;
-	}
+    }
+
+    /// <summary>
+    /// Generates a moveset dependent on color of the player and direction.
+    /// both supplied vectors are split into their basis multiples. Laterals
+    /// are copied and mirrored. Returns list of all combinations of one
+    /// forward and one lateral basis vector multiple.
+    /// </summary>
+    public static int[][] Directionals(int[] forwards, int[] laterals)
+    {
+        // Split the supplied lateral offsets into multiples of basis vectors
+        int[][] lateralSet = Combinatorics.Split(laterals);
+
+        // if no lateral offset was defined, just return the forward options
+        if (laterals.Length == 0)
+        {
+            return Combinatorics.Split(forwards);
+        }
+
+        // generate a set of scalars for original, and mirrored lateral offsets
+        int[] scalars = new int[] {1, -1};
+
+        // generate list of original and mirrored lateral vectors
+        int[][] lateralsSigned = Combinatorics.Multiply(lateralSet, scalars);
+        
+        // split out the specificed forward basis vectors
+        int[][] forwardSet = Combinatorics.Split(forwards);
+
+        // Recombine each of the forward and signed lateral vectors into the
+        // final moveset.
+        int[][] result = Combinatorics.Add(forwardSet, lateralsSigned);
+        return result;
+    }
+
 }
