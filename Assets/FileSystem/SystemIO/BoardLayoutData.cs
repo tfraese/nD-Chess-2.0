@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Piece Configuration of starting board
+/// Serializable piece Configuration of starting board. Holds information as
+/// to what board to use, starting piece array, custom pieces, and direction
+/// forwards / lateral / etc. classification.
 /// </summary>
 [Serializable]
 public class BoardLayoutData : MonoBehaviour
@@ -17,7 +19,5 @@ public class BoardLayoutData : MonoBehaviour
 	[SerializeField] List<int> boardState;
 	[SerializeField] bool customPieces;
 	[SerializeField] List<PieceData> piecePalette;
-	[SerializeField] List<ListData> forwardDirections;
-	[SerializeField] List<ListData> lateralDirections;
-	[SerializeField] List<ListData> neutralDirections;
+	[SerializeField] List<ListData> directionTypes; // stores forward, lateral, etc
 }

@@ -48,6 +48,7 @@ namespace TFraese
 			new int[] {1, 15, 105, 455, 1365, 3003, 5005, 6435, 6435, 5005, 3003, 1365, 455, 105, 15, 1},
 			new int[] {1, 16, 120, 560, 1820, 4368, 8008, 11440, 12870, 11440, 8008, 4368, 1820, 560, 120, 16, 1}
 		};
+
 		// Precalculated factorials for 0 <= n <= 12
 		// 12! is the highest factorial that fits inside a standard 32-bit signed int
 		private static readonly int[] Factorials = new int[]
@@ -67,6 +68,8 @@ namespace TFraese
 			479001600   // 12!
 		};
 
+		// Sample from precalculated factorial values. 13! cannot be represented with
+		// an int.
 		public static int Factorial(int n)
 		{
 			if (n < 0 || n >= Factorials.Length)
@@ -136,6 +139,7 @@ namespace TFraese
 			}
 			return results;
 		}
+
 		/// <summary>
 		/// Generate all bitstrings of length n
 		/// </summary>
@@ -574,6 +578,250 @@ namespace TFraese
 				}
 			}
 			return injected;
+		}
+
+		/// <summary>
+		/// Constructs the set of all combinations of component-wise sums of
+		/// vectors from setA and vectors from set B.
+		/// </summary>
+		public static int[][] Add(int[][] setA, int[][] setB)
+		{
+			int[][] result = new int[setA.Length * setB.Length][];
+			int count = 0;
+			for (int a = 0; a < setA.Length; a++)
+			{
+				for (int b = 0; b < setB.Length; b++)
+				{
+					result[count] = Add(setA[a], setB[b]);
+					count++;
+				}
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Component wise addition of two vectors, performs safety checks.
+		/// </summary>
+		public static int[] Add(int[] a, int[] b, bool performSafetyChecks)
+		{
+			if (!performSafetyChecks)
+			{
+				return Add(a, b);
+			}
+			if (a.Length != b.Length)
+			{
+				Debug.LogError("Dimension mismatch adding arrays");
+				return null;
+			}
+			return Add(a, b);
+		}
+
+		/// <summary>
+		/// Unsafe component wise addition of two vectors
+		/// </summary>
+		public static int[] Add(int[] a, int[] b)
+		{
+			int[] result = new int[a.Length];
+			for (int i = 0; i < a.Length; i++)
+			{
+				result[i] = a[i] + b[i];
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Constructs the set of all vectors supplied multipled by each scalar
+		/// supplied.
+		/// </summary>
+		public static int[][] Multiply(int[][] set, int[] scalars)
+		{
+			int[][] result = new int[set.Length * scalars.Length][];
+			int count = 0;
+			for (int a = 0; a < set.Length; a++)
+			{
+				for (int s = 0; s < scalars.Length; s++)
+				{
+					result[count] = Multiply(set[a], scalars[s]);
+					count++;
+				}
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Multiplies a set of vectors by a given scalar
+		/// </summary>
+		public static int[][] Multiply(int[][] set, int s)
+		{
+			int[][] result = new int[set.Length][];
+			int count = 0;
+			for (int a = 0; a < set.Length; a++)
+			{
+				result[count] = Multiply(set[a], s);
+				count++;
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Scalar multiplication of a vector
+		/// </summary>
+		public static int[] Multiply(int[] a, int s)
+		{
+			int[] result = new int[a.Length];
+			for (int i = 0; i < a.Length; i++)
+			{
+				result[i] = a[i]*s;
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Splits any non-zero components into scalar multiples of a cartesian
+		/// basis vector, for all vectors. [1,0,3] -> {[1,0,0], [0,0,3]}
+		/// </summary>
+		public static int[][] Split(int[][] vectors)
+		{
+			List<int[]> result = new List<int[]>();
+			for (int i = 0; i < vectors.Length; i++)
+			{
+				int[][] subResult = Split(vectors[i]);
+				result.AddRange(subResult);
+			}
+			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Splits any non-zero components into scalar multiples of a cartesian
+		/// basis vector. [1,0,3] -> {[1,0,0], [0,0,3]}
+		/// </summary>
+		public static int[][] Split(int[] v)
+		{
+			List<int[]> result = new List<int[]>();
+			for (int i = 0; i < v.Length; i++)
+			{
+				if (v[i] != 0)
+				{
+					int[] split = new int[v.Length];
+					split[i] = v[i];
+					result.Add(split);
+				}
+			}
+			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Returns an array containing the indices (in strictly ascending order)
+		/// of all non-zero components of the input vector
+		/// </summary>
+		public static int[][] FindNonZero(int[][] vectors)
+		{
+			List<int[]> result = new List<int[]>();
+			for (int i = 0; i < vectors.Length; i++)
+			{
+				int[] nonZero = FindNonZero(vectors[i]);
+				result.Add(nonZero);
+			}
+			if (result.Count == 0)
+			{
+				// explicitly make sure empty results dont get returned as
+				// null, so we can use the return values length as a count
+				return new int[0][];
+			}
+			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Returns an array containing the indices (in strictly ascending order)
+		/// of all non-zero components of the input vector
+		/// </summary>
+		public static int[] FindNonZero(int[] v)
+		{
+			List<int> result = new List<int>();
+			for (int i = 0; i < v.Length; i++)
+			{
+				if (v[i] != 0) result.Add(i);
+			}
+			if (result.Count == 0)
+			{
+				// explicitly make sure empty results dont get returned as
+				// null, so we can use the return values length as a count
+				return new int[0];
+			}
+			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Takes in associated arrays and performs mapping into an empty array of
+		/// given length. Each mapping is only applied to its corresponding vector.
+		/// </summary>
+		public static int[][] Map(int[][] associatedVectors, int[][] associatedMappings, int length)
+		{
+			int[][] result = new int[associatedVectors.Length][];
+			if (associatedVectors.Length != associatedMappings.Length)
+			{
+				Debug.LogError("Associated array length mismatch in mapping");
+				return null;
+			}
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = Map(associatedVectors[i], associatedMappings[i], length);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Takes in associated arrays and performs mapping into an empty array of
+		/// given length. Each mapping is only applied to its corresponding vector.
+		/// </summary>
+		public static int[][] Map(int[][] vectors, int[] mapping, int length)
+		{
+			int[][] result = new int[vectors.Length][];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = Map(vectors[i], mapping, length);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Takes an input vector and sequentially places every component into
+		/// the indices the mapping contains of an emtpy array of given length
+		/// </summary>
+		public static int[] Map(int[] vector, int[] mapping, int length, bool performSafetyChecks)
+		{
+			if (!performSafetyChecks)
+			{
+				return Map(vector, mapping, length);
+			}
+			int max = int.MinValue;
+			for (int i = 0; i < mapping.Length; i++)
+			{
+				if (mapping[i] > max)
+				{
+					max = mapping[i];
+				}
+			}
+			if (max >= length)
+			{
+				Debug.LogError("Mapping out of bounds for specified length");
+			}
+			return Map(vector, mapping, length);
+
+		}
+
+		/// <summary>
+		/// Takes an input vector and sequentially places every component into
+		/// the indices the mapping contains of an emtpy array of given length
+		/// </summary>
+		public static int[] Map(int[] vector, int[] mapping, int length)
+		{
+			int[] result = new int[length];
+			for (int i = 0; i < vector.Length; i++)
+			{
+				result[mapping[i]] = vector[i];
+			}
+			return result;
 		}
 	}
 }

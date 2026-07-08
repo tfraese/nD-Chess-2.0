@@ -2,17 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardLayout : MonoBehaviour
+public enum Axes
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	Forward,
+	Lateral,
+	None,
+	Multiverse,
+	Time
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+/// <summary>
+/// Abstract class for defining a board layout.
+/// </summary>
+public class BoardLayout
+{
+	public int[] bounds;
+	public Axes[] axesTypes;
+
+	public int[] GetAxes(Axes axesType)
+	{
+		int[] result = new int[bounds.Length];
+		for (int i = 0; i < bounds.Length; i++)
+		{
+			if (axesTypes[i] == axesType)
+			{
+				result[i] = 1;
+			}
+		}
+		return result;
+	}
 }
