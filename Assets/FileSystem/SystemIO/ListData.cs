@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generic serializable wrapper class for lists. Includes field for a label as
+/// well.
+/// </summary>
 [Serializable]
 public class ListData : MonoBehaviour
 {
-	[SerializeField] string listLabel;
-	[SerializeField] List<int> list;
+	[SerializeField] public string listLabel;
+	[SerializeField] public List<int> list;
 }

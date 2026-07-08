@@ -56,24 +56,24 @@ public static class MoveGeneration
 
     /// <summary>
     /// Generates all move vectors for a piece that can move any permutation of
-    /// provided offsets in any directions. Assumes vals are unique.
+    /// provided offsets in any directions. Assumes components are unique.
     /// </summary>
-    public static int[][] Permutables(int n, int[] vals)
+    public static int[][] Permutables(int n, int[] components)
     {
-        int[] freq = new int[vals.Length];
+        int[] freq = new int[components.Length];
         for (int i = 0; i < freq.Length; i++)
         {
             freq[i] = 1;
         }
-        return Permutables(n, vals, freq);
+        return Permutables(n, components, freq);
     }
 
-	/// <summary>
-	/// Generates all move vectors for a piece that can move any permutation of
-	/// provided offsets in any directions. Assumes vals are unique, accepts a 
-    /// frequency array.
-	/// </summary>
-	public static int[][] Permutables(int n, int[] vals, int[] freq)
+    /// <summary>
+    /// Generates all move vectors for a piece that can move any permutation of
+    /// provided offsets in any directions. Assumes components are unique. Use
+    /// a frequency array for repeat elements.
+    /// </summary>
+    public static int[][] Permutables(int n, int[] components, int[] freq)
     {
         // calculate the number of non-zero components based on the frequency
         int c = 0;
@@ -83,21 +83,21 @@ public static class MoveGeneration
         }
 
         // warn the console if we create an empty moveset
-		if (c > n)
-		{
-			Debug.LogWarning($"Generating {c} permutable for {n} < {c}, empty moveset created");
-			return new int[0][];
-		}
+        if (c > n)
+        {
+            Debug.LogWarning($"Generating {c} permutable for {n} < {c}, empty moveset created");
+            return new int[0][];
+        }
 
         // permute the values given
-		int[][] permutations = Combinatorics.Permutations(vals, freq);
+        int[][] permutations = Combinatorics.Permutations(components, freq);
 
         // generate bitstrings to sign them
         int[][] bitstrings = Combinatorics.Bitstrings(c);
 
         // sign the permutations
-		int[][] signed = Combinatorics.Sign(permutations, bitstrings);
-		
+        int[][] signed = Combinatorics.Sign(permutations, bitstrings);
+
         // calculate zero count to fill
         int zeroCount = n - c;
         if (zeroCount == 0) { return signed; }
@@ -107,25 +107,36 @@ public static class MoveGeneration
 
         // inject the number of zeros needed to pad out to n dimensions
         int[][] injected = Combinatorics.Inject(0, signed, injectionSequences);
-		return injected;
+        return injected;
     }
-
+	/// <summary>
+	/// Generates a moveset dependent on color of the player and direction,
+	/// that can move f squares forward. Dependent on board layout
+	/// </summary>
+	public static int[][] Directionals(int f, int[] forwards)
+    {
+        return Directionals(f, forwards, 0, null);
+    }
     /// <summary>
-    /// Generates a moveset dependent on color of the player and direction.
-    /// both supplied vectors are split into their basis multiples. Laterals
-    /// are copied and mirrored. Returns list of all combinations of one
-    /// forward and one lateral basis vector multiple.
+    /// Generates a moveset dependent on color of the player and direction,
+    /// that can move f squares forward and l squares sideways. Dependent
+    /// on board layout
     /// </summary>
-    public static int[][] Directionals(int[] forwards, int[] laterals)
+    public static int[][] Directionals(int f, int[] forwards, int l, int[] laterals)
     {
         // Split the supplied lateral offsets into multiples of basis vectors
-        int[][] lateralSet = Combinatorics.Split(laterals);
+        int[][] forwardSet = Combinatorics.Split(forwards);
+        int[][] forwardOffsets = Combinatorics.Multiply(forwardSet, f);
 
         // if no lateral offset was defined, just return the forward options
-        if (laterals.Length == 0)
+        if (laterals == null || laterals.Length == 0)
         {
-            return Combinatorics.Split(forwards);
+            return forwardOffsets;
         }
+
+        int[][] lateralSet = Combinatorics.Split(laterals);
+        int[][] lateralOffsets = Combinatorics.Multiply(lateralSet, l);
+
 
         // generate a set of scalars for original, and mirrored lateral offsets
         int[] scalars = new int[] {1, -1};
@@ -133,13 +144,9 @@ public static class MoveGeneration
         // generate list of original and mirrored lateral vectors
         int[][] lateralsSigned = Combinatorics.Multiply(lateralSet, scalars);
         
-        // split out the specificed forward basis vectors
-        int[][] forwardSet = Combinatorics.Split(forwards);
-
         // Recombine each of the forward and signed lateral vectors into the
         // final moveset.
         int[][] result = Combinatorics.Add(forwardSet, lateralsSigned);
         return result;
     }
-
 }
