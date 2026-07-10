@@ -20,6 +20,16 @@ using UnityEngine;
  * timelines branch in a different direction. See Fourfold.cs for more details
  */
 
+
+// FourFoldMultiverse is a four player version of multiverse time travel. White
+// White and player 3 split vertically, Black and player 4 split horizontally.
+enum MultiverseTypes
+{ 
+	Singularity,
+	MultiverseTimeTravel,
+	FourFoldMultiverse
+}
+
 /// <summary>
 /// Parent class for multiverse types. Acts as wrapper for regular boards
 /// (singularity) and allows for timeline branching on other modes

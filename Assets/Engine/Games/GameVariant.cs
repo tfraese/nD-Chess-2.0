@@ -15,10 +15,6 @@ using UnityEngine;
  * variants.
  */
 
-// FourFoldMultiverse is a four player version of multiverse time travel. White
-// White and player 3 split vertically, Black and player 4 split horizontally.
-enum MultiverseTypes {Singularity, MultiverseTimeTravel, FourFoldMultiverse}
-
 /// <summary>
 /// Defines game variant, including board type, players, and multiverse.
 /// Game manager will load settings like clock and modifier rules. Does not
