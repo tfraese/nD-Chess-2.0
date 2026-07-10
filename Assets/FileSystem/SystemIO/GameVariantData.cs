@@ -7,7 +7,7 @@ using UnityEngine;
 /// Board and layout game uses
 /// </summary>
 [Serializable]
-public class GameVariantData : MonoBehaviour
+public class GameVariantData
 {
     [SerializeField] string variantName;
     [SerializeField] string variantKey; // Hash value

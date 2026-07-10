@@ -10,7 +10,7 @@ using UnityEngine;
 /// load).
 /// </summary>
 [Serializable]
-public class PieceData : MonoBehaviour
+public class PieceData
 {
 
 	[SerializeField] public string pieceName;
@@ -86,7 +86,6 @@ public class PieceData : MonoBehaviour
 	private bool UpdateData()
 	{
 		bool matched = CalculateHash();
-		UpdateGameObjectName();
 		return matched;
 	}
 	/// <summary>
@@ -106,12 +105,4 @@ public class PieceData : MonoBehaviour
 		Debug.LogWarning("Hash function not yet implemented");
 		return UnityEngine.Random.Range(0, int.MaxValue).ToString();
 	}
-	/// <summary>
-	/// Rename the game object the instance of the monobehavior is attached to
-	/// </summary>
-	private void UpdateGameObjectName()
-	{
-		this.name = $"{pieceName}-{pieceKey}";
-	}
-
 }

@@ -13,7 +13,7 @@ using UnityEngine;
 /// Additional rules and modifiers unique to game instance
 /// </summary>
 [Serializable]
-public class GameSettingsData : MonoBehaviour
+public class GameSettingsData
 {
 
 }
