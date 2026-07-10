@@ -8,7 +8,7 @@ using UnityEngine;
 /// well.
 /// </summary>
 [Serializable]
-public class ListData : MonoBehaviour
+public class ListData
 {
 	[SerializeField] public string listLabel;
 	[SerializeField] public List<int> list;

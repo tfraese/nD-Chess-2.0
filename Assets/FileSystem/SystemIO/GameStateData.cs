@@ -8,7 +8,7 @@ using UnityEngine;
 /// Game Save Data
 /// </summary>
 [Serializable]
-public class GameStateData : MonoBehaviour
+public class GameStateData
 {
 	[SerializeField] string GameName;
 	[SerializeField] GameVariantData gameVariantData;

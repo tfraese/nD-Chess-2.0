@@ -7,16 +7,10 @@ using UnityEngine;
 /// Information about board the game is played on (no layout)
 /// </summary>
 [Serializable]
-public class BoardData : MonoBehaviour
+public class BoardData
 {
-	enum BoardTypes { Cartesian, Toroidal, HyperTorroidal, Klein, XKCD }
-
-	[SerializeField] string boardName;
-	[SerializeField] string boardKey; // Hash value
-	[SerializeField] int boardType;
-	[SerializeField] List<int> dimensions;
-	[SerializeField] List<int> bounds;
-	[SerializeField] List<float> offsets;
-	[SerializeField] List<int> transpositionArray;
-	[SerializeField] List<string> dimensionLabels;
+	[SerializeField] public string boardName;
+	[SerializeField] public string boardKey; // Hash value
+	[SerializeField] public int boardType;
+	[SerializeField] public List<int> dimensions;
 }
