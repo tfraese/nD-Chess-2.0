@@ -3,43 +3,80 @@ using System.Collections.Generic;
 using UnityEngine;
 using TFraese;
 
+public enum BoardTypes
+{
+	Cartesian,
+	Toroidal,
+	HyperToroidal,
+	Klein
+}
+
 /// <summary>
 /// Abstract class that holds the state of a given board.
 /// </summary>
 public class Board
 {
+	public string boardName;
+
 	// the boards coordinate in a multiverse
 	public NVector mvtimeVector;
 
-	// TODO: Convert this into an enum that children inheriting from the board
-	//		 class
-	BoardType type;
+	// identifier for child classes
+	BoardTypes boardType;
 
 	// Stores dimensionality, forward/lateral, and starting configuration info
+	// Even blank boards should be created with layouts including blank states
 	BoardLayout layout;
 
 	// Board state will update over time with changes to board
-	BoardState state;
+	protected BoardState state;
 
 	/// <summary>
-	/// Construct a board with a given starting state from the supplied layout
+	/// Creates a new board, and copies the type, dimensions, and board state data
+	/// into new objects. Copys the reference of the layout used
 	/// </summary>
-	public Board(BoardType type, BoardLayout layout)
+	/// <returns></returns>
+	public Board Clone()
 	{
-		BoardState state = new BoardState(layout.startingState);
-		this.layout = layout;
-		this.type = type;
+		Board clone = Create(this.boardType, this.layout.dimensions);
+		
+		// since we cloned an empty board and copied its state, we must manually
+		// assign the layout.
+		// TODO: investigate the importance of this
+		clone.layout = this.layout;
+		
+		// Copy the state data of the current board into its new clone.
+		clone.state = new BoardState(this.state);
+		return clone;
+	}
+
+	/// <summary>
+	/// Create a new board with a reference to the layout supplied.
+	/// </summary>
+	public static Board Create(BoardLayout layout)
+	{
+		BoardTypes type = layout.boardType;
+		switch (type)
+		{
+			default:
+				Debug.LogWarning("Falling back to cartesian board");
+				return new BoardCartesian(layout);
+		}
 	}
 	/// <summary>
-	/// Construct a board with a starting state identical to the supplied board's
-	/// current state. Copies the state data into a new object, not reference
+	/// Internal function to create a blank board without a layout. Is only used
+	/// to skip copying the starting layout everytime a new board is instantiated
 	/// </summary>
-	public Board(BoardType type, BoardLayout layout, BoardState state)
+	private static Board Create(BoardTypes type, int[] dimensions)
 	{
-		BoardState boardState = new BoardState(state);
-		this.layout = layout;
-		this.type = type;
+		switch (type)
+		{
+			default:
+				Debug.LogWarning("Falling back to cartesian board");
+				return new BoardCartesian(dimensions);
+		}
 	}
+
 	/// <summary>
 	/// Gather all non-empty pieces.
 	/// </summary>

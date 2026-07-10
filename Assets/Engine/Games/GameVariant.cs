@@ -22,11 +22,9 @@ using UnityEngine;
 /// </summary>
 public class GameVariant : MonoBehaviour
 {
-    int playerCount;
-
-    BoardState gameBoard;
-    BoardLayout boardLayout;
-
-    int multiverseType;
-
+    public int playerCount;
+    
+    public MultiverseTypes multiverseType;
+    public BoardLayout boardLayout; // includes board type
+    Dictionary<Piece, MoveSet> PiecePalette;
 }

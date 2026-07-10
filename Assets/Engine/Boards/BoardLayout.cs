@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Evaluate if this is the best place to store this
 /// <summary>
 /// Classifications for axes. Internally Forward, Lateral, and None should be
 /// the only options used. Multiverse and Time will be used to annotate
@@ -26,6 +25,7 @@ public class BoardLayout
 {
 	public int[] dimensions;
 	public Axes[] axesTypes;
+	public BoardTypes boardType;
 	public BoardState startingState;
 
 	/// <summary>

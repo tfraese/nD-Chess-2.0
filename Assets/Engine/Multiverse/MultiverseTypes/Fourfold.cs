@@ -13,4 +13,8 @@ using UnityEngine;
 public class Fourfold : Multiverse
 {
 	private List<List<Timeline>> linesArray;
+	public Fourfold(Board templateBoard)
+	{
+
+	}
 }

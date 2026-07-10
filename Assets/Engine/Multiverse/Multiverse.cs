@@ -23,7 +23,7 @@ using UnityEngine;
 
 // FourFoldMultiverse is a four player version of multiverse time travel. White
 // White and player 3 split vertically, Black and player 4 split horizontally.
-enum MultiverseTypes
+public enum MultiverseTypes
 { 
 	Singularity,
 	MultiverseTimeTravel,
@@ -39,7 +39,26 @@ public class Multiverse
 	// A template board class that will be utilized for getting general information
 	// common to all boards within the multiverse, and used for initial setup.
 	public Board templateBoard;
-	
+
+	/// <summary>
+	/// Wrapper for switch case for constructing child classes from the enum of types
+	/// </summary>
+	public static Multiverse Create(MultiverseTypes type, Board templateBoard)
+	{
+		switch (type)
+		{
+			case MultiverseTypes.Singularity:
+				return new Singularity(templateBoard);
+			case MultiverseTypes.MultiverseTimeTravel:
+				return new MVTime(templateBoard);
+			case MultiverseTypes.FourFoldMultiverse:
+				return new Fourfold(templateBoard);
+			default:
+				Debug.LogWarning("Falling back to singularity");
+				return new Singularity(templateBoard);
+		}
+	}
+
 	/// <summary>
 	/// Enumerate all available moves within the multiverse
 	/// </summary>

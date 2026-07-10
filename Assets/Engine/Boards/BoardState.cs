@@ -15,9 +15,8 @@ using TFraese;
 public class BoardState
 {
 	// for internal use only. Should always be assigned in constructors and
-	// remain unchanged after.
+	// remain unchanged after. Access dimensions from layout
 	private int[] dimensions;
-
 
 	// TODO: Evaluate wether or not this can be made a struct instead of a class
 	// Array of piece reference instances. Lightweight Class since this will
