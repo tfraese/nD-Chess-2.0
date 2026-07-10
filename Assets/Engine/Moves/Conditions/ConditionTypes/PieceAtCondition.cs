@@ -6,7 +6,7 @@ public class PieceAtCondition : Condition
 {
 	List<int[]> riderDirection;
 	List<int[]> offsets;
-	List<Piece> pieces;
+	List<PieceType> pieces;
 
 	public override bool IsSatisfied(MoveInternal move, BoardState boardState)
 	{

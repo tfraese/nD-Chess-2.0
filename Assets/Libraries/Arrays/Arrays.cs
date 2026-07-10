@@ -11,6 +11,26 @@ namespace TFraese
     /// </summary>
     public class Arrays
     {
+        /// <summary>
+        /// Unsafe concatenation
+        /// </summary>
+        public static int[] Concat(int[] a, int[] b)
+        {
+            int[] result = new int[a.Length + b.Length];
+            System.Array.Copy(result, a, a.Length);
+            System.Array.Copy(result, a.Length, b, 0, b.Length);
+            return result;
+        }
+        /// <summary>
+        /// Remove the first couple elements of an array and resize it.
+        /// </summary>
+        public static int[] TrimPrefix(int[] a, int c)
+        {
+            int[] result = new int[a.Length - c];
+			result = new int[result.Length - c];
+			System.Array.Copy(a, c, result, 0, result.Length);
+            return result;
+		}
 		/// <summary>
 		/// Converts a 2D jagged array to a human readable string for
         /// easier debugging.

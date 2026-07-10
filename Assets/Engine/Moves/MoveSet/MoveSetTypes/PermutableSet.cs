@@ -23,7 +23,7 @@ public class PermutableSet : MoveSet
 
 		// Calculate the dimensionality of the move vectors to generate, as well as
 		// the number of non-zero components to use
-		int n = layout.bounds.Length;
+		int n = layout.dimensions.Length;
 		int c = permutables.Count;
 
 		bool valid = true;

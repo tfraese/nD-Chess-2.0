@@ -21,7 +21,7 @@ public class RiderSet : MoveSet
 		base.Generate(layout);
 
 		// Calculate the dimensionality of the piece
-		int n = layout.bounds.Length;
+		int n = layout.dimensions.Length;
 		foreach (int c in agonals)
 		{
 			// if we have negative n or n out of bounds skip this element
