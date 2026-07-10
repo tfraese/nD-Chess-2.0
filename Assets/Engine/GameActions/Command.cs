@@ -13,12 +13,16 @@ using UnityEngine;
 /// </summary>
 public class Command
 {
-	Piece pieceFrom;
-	Piece pieceTo;
+	// Consider possibility of using an Enum instead of an object. Commands in
+	// particular will need to be serialized and reconstructed over the network,
+	// so it may be worth it to keep things simple.
+	PieceType pieceFrom;
+	PieceType pieceTo;
 
+	// TODO: Enumerate various options
 	int teamFrom;
 	int teamTo;
 
-	int[] coordinateFrom;
-	int[] coordinateTo;
+	HyperVector coordinateFrom;
+	HyperVector coordinateTo;
 }

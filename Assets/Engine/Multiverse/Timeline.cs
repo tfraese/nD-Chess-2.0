@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public class Timeline
 {
+	// TODO: Some of this information would be better fit within a TimelineData
+	//		 class because it is strictly generating information.
+
 	// line coordinate across multiverse
 	public int line;
 

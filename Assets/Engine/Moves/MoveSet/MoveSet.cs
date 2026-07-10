@@ -21,9 +21,15 @@ public enum SetType
  */
 public class MoveSet
 {
-	
+	// Enum for child class identification
+	// TODO: Maybe stop doing this as a practice and just attempt type casts
+	//		 I'm sure the compiler just does this behind the scenes anyway
 	public SetType setType;
-	public List<MoveVector> moveVectors;
+
+	// TODO: Evalute whether or not this is an appropriate structure for this
+	//		 At the very least rename NVector to something else or use
+	//		 NVectors instead
+	public List<NVector> NVectors;
 	protected List<Condition> conditions;
 	int range { get; set; } = -1;
 
@@ -35,11 +41,11 @@ public class MoveSet
 	/// </summary>
 	public virtual void Generate(BoardLayout layout)
 	{
-		if (moveVectors == null) { moveVectors = new List<MoveVector>(); }
+		if (NVectors == null) { NVectors = new List<NVector>(); }
 	}
 	// Clear all generated moves.
 	public virtual void Clear()
 	{
-		moveVectors?.Clear();	
+		NVectors?.Clear();	
 	}
 }

@@ -25,11 +25,11 @@ public class PieceManager : MonoBehaviour
 {
 	public static PieceManager singleton;
 
-	List<Piece> pieces;
+	List<PieceType> pieces;
 	
 	// keep a dictionary of pieces that we can use to quickly find the index of
 	// said piece in the list.
-	Dictionary<Piece, int> pieceDictionary;
+	Dictionary<PieceType, int> pieceDictionary;
 
 	#region Initialization
 	// being a monobehavior, this will be present in the scene, and use a singleton
@@ -56,7 +56,7 @@ public class PieceManager : MonoBehaviour
 		if (pieces.Count != pieceDictionary.Count) return false;
 		for (int i = 0; i < pieces.Count; i++)
 		{
-			Piece p = pieces[i];
+			PieceType p = pieces[i];
 			if (p == null) return false;
 
 			int p_enum = GetPieceIndex(p);
@@ -70,7 +70,7 @@ public class PieceManager : MonoBehaviour
 	#endregion
 
 	#region Piece Management
-	public void AddPiece(Piece piece)
+	public void AddPiece(PieceType piece)
 	{
 		pieceDictionary.Add(piece, pieces.Count);
 		pieces.Add(piece);
@@ -80,7 +80,7 @@ public class PieceManager : MonoBehaviour
 	/// Removes piece by piece reference. calls functions that perform null and
 	/// in-dictionary checks.
 	/// </summary>
-	public void RemovePiece(Piece piece)
+	public void RemovePiece(PieceType piece)
 	{
 		// int to store the index of the supplied piece
 		int pieceEnum = GetPieceIndex(piece);
@@ -96,7 +96,7 @@ public class PieceManager : MonoBehaviour
 	/// <summary>
 	/// Returns -1 upon errors, and logs details to the Debug Warning log.
 	/// </summary>
-	public int GetPieceIndex(Piece piece)
+	public int GetPieceIndex(PieceType piece)
 	{
 		int pieceEnum = 0;
 		// piece null check

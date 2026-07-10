@@ -27,19 +27,6 @@ using UnityEngine;
 /// </summary>
 public class MoveInternal : GameAction
 {
-    List<Condition> conditions;
-    /*
-     * Follow-ups allow storage of optional moves to be selected from after the
-     * first move has executed. ex. Pawn moves once in w direction. An optional
-     * follow-up would be to move in the y direction, if allowing split-forward
-     * double move. Some Tai and Taikyouku shogi pieces require this as well.
-     */
-    List<MoveInternal> followUps;
-
-    // Pawn promotion is mandatory in both shogi and chess. Other shogi pro-
-    // motions, and possibly toroidal pawn chess sometimes optional.
-    bool isFollowUpMandatory;
-
     // simplest component of a move. Contains piece from, coordinate from,
     // coordinate to, color from, color to. Fully reversible.
     List<Command> commands = new List<Command>();

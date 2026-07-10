@@ -23,7 +23,7 @@ public class PermutableSet : MoveSet
 
 		// Calculate the dimensionality of the move vectors to generate, as well as
 		// the number of non-zero components to use
-		int n = layout.bounds.Length;
+		int n = layout.dimensions.Length;
 		int c = permutables.Count;
 
 		bool valid = true;
@@ -41,12 +41,12 @@ public class PermutableSet : MoveSet
 			valid = false;
 		}
 
-		// if all goes according to plan add the offsets to the MoveVector list
+		// if all goes according to plan add the offsets to the NVector list
 		if (valid)
 		{
 			foreach (int[] perm in permutableSet)
 			{
-				moveVectors.Add(new MoveVector(perm));
+				NVectors.Add(new NVector(perm));
 			}
 		}
 	}

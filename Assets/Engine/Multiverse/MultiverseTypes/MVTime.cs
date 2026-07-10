@@ -30,4 +30,9 @@ using UnityEngine;
 public class MVTime : Multiverse
 {
 	private List<Timeline> lines;
+	public MVTime(Board board)
+	{
+		base.templateBoard = board.Clone();
+		Debug.LogWarning("MVTime setup not implemented");
+	}
 }

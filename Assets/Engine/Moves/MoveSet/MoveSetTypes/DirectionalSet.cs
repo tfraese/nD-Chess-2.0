@@ -53,7 +53,7 @@ public class DirectionalSet : MoveSet
 			{
 				foreach (int[] v in vectors)
 				{
-					this.moveVectors.Add(new MoveVector(v));
+					this.NVectors.Add(new NVector(v));
 				}
 			}
 		}
