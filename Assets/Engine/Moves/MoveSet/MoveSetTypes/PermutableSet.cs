@@ -41,12 +41,12 @@ public class PermutableSet : MoveSet
 			valid = false;
 		}
 
-		// if all goes according to plan add the offsets to the MoveVector list
+		// if all goes according to plan add the offsets to the NVector list
 		if (valid)
 		{
 			foreach (int[] perm in permutableSet)
 			{
-				moveVectors.Add(new MoveVector(perm));
+				NVectors.Add(new NVector(perm));
 			}
 		}
 	}

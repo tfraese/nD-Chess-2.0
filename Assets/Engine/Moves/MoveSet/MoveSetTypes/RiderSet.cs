@@ -38,10 +38,10 @@ public class RiderSet : MoveSet
 				continue;
 			}
 
-			// Add the vectors to the MoveVector list
+			// Add the vectors to the NVector list
 			foreach (int[] vector in riderDirections)
 			{
-				moveVectors.Add(new MoveVector(vector));
+				NVectors.Add(new NVector(vector));
 			}
 		}
 	}

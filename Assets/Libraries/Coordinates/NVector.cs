@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TFraese;
 
 /// <summary>
 /// Abstract wrapper object for arrays. Coordinate of arbitrary dimension
@@ -12,4 +13,8 @@ public class NVector
     {
         this.array = (int[])array.Clone();
     }
+	public override string ToString()
+	{
+		return "\n" + Arrays.ToString(array);
+	}
 }
