@@ -9,7 +9,8 @@ using UnityEngine;
 [Serializable]
 public class GameVariantData
 {
-    [SerializeField] string variantName;
-    [SerializeField] string variantKey; // Hash value
-    [SerializeField] BoardLayoutData boardLayoutData;
+    [SerializeField] public string variantName;
+    [SerializeField] public string variantKey; // Hash value
+    [SerializeField] public int multiverseType;
+    [SerializeField] public BoardLayoutData boardLayoutData;
 }
