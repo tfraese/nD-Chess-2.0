@@ -80,7 +80,10 @@ public class DirectionalSet : MoveSet
 	{
 		Axes[] axes = game.variant.boardLayout.axesTypes;
 		bool flip = piece.color == 1;
-		Convolution convolution = new Convolution();
+		
+		// TODO: Fix this null reference exception by properly generating
+		// convolutions
+		Convolution convolution = convolutions[piece.color];
 
 		int color = piece.color;
 		List<MoveUX> result = new List<MoveUX>();
