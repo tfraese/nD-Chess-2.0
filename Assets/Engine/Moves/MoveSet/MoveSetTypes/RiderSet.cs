@@ -9,16 +9,18 @@ using UnityEngine;
 public class RiderSet : MoveSet
 {
 	public List<int> agonals;
+
 	public RiderSet(List<int> agonals, List<Condition> conditions=null)
 	{
 		base.conditions = conditions;
 		base.setType = SetType.Rider; // for identifying child class type
 		this.agonals = agonals; // #'s of directions piece can move at a time
 	}
-	public override void Generate(BoardLayout layout)
+	public override void Generate(Game game)
 	{
 		// Call base virtual function to initialize the moveset list
-		base.Generate(layout);
+		base.Generate(game);
+		BoardLayout layout = game.variant.boardLayout;
 
 		// Calculate the dimensionality of the piece
 		int n = layout.dimensions.Length;

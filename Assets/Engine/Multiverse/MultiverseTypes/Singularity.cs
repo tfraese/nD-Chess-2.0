@@ -33,7 +33,7 @@ public class Singularity : Multiverse
 	/// <summary>
 	/// Wraps the single board in a list for polymorphism
 	/// </summary>
-	public override List<Board> GetBoards()
+	public override List<Board> GetBoards(BoardStatus boardStatus)
 	{
 		return new List<Board>() { board };
 	}

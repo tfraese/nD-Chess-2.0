@@ -110,17 +110,18 @@ public class PieceType
     /// Generates the vector offsets for a piece's base moveset. Requires info
     /// about the board layout for directional pieces.
     /// </summary>
-    public void Generate(BoardLayout layout)
+    public void Generate(Game game)
     {
+        BoardLayout layout = game.variant.boardLayout;
         if (moveSet != null)
         {
-            moveSet.Generate(layout);
+            moveSet.Generate(game);
         }
         if (subpieces != null)
         {
             foreach (PieceType subpiece in subpieces)
             {
-                subpiece.Generate(layout);
+                subpiece.Generate(game);
             }
         }
     }

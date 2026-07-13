@@ -23,6 +23,10 @@ public class BoardState
 	// be instantiated a lot.
 	public Piece[] pieces;
 
+	public Piece GetPiece(NVector nVector)
+	{
+		return GetPiece(nVector.array);
+	}
 	// TODO: Evaluate whether or not to use NVector's instead of int[]'s
 	public Piece GetPiece(int[] coordinate)
 	{

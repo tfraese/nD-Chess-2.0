@@ -36,6 +36,16 @@ public enum MultiverseTypes
 /// </summary>
 public class Multiverse
 {
+	public bool InBounds(HyperVector v)
+	{
+		Debug.LogWarning("Multiverse InBounds() not implemented");
+		return false;
+	}
+	public Piece GetPiece(HyperVector coordinate)
+	{
+		Debug.LogWarning("Multiverse GetPiece() not implemented");
+		return null;
+	}
 	// A template board class that will be utilized for getting general information
 	// common to all boards within the multiverse, and used for initial setup.
 	public Board templateBoard;
@@ -64,17 +74,28 @@ public class Multiverse
 	/// </summary>
 	public List<MoveUX> GetMoves()
 	{
-		Debug.LogWarning("Multiverse.GetMoves() Not implemented");
 		List<MoveUX> result = new List<MoveUX>();
+		List<Board> boards = GetBoards(BoardStatus.Playable);
+		foreach (Board board in boards)
+		{
+			// TODO: Cache this in the board or swap to a list of tuples
+			Dictionary<Piece, HyperVector> pieces = board.GetPieces();
+			foreach (Piece piece in pieces.Keys)
+			{
+				HyperVector from = pieces[piece];
+				MoveSet moveSet = piece.type.moveSet;
+				List<MoveUX> pieceMoves = moveSet.ConstructMoves(piece, from, this);
+			}
+		}
 		return null;
 	}
 	/// <summary>
 	/// Return all non-empty pieces, as well as the coordinates they reside within.
 	/// </summary>
-	public Dictionary<Piece, HyperVector> GetPieces()
+	public Dictionary<Piece, HyperVector> GetPieces(BoardStatus	boardStatus)
 	{
 		Dictionary<Piece, HyperVector> pieces = new Dictionary<Piece, HyperVector>();
-		List<Board> boards = GetBoards();
+		List<Board> boards = GetBoards(boardStatus);
 		foreach (Board board in boards)
 		{
 			Dictionary<Piece, HyperVector> boardPieces = board.GetPieces();
@@ -85,9 +106,17 @@ public class Multiverse
 		}
 		return pieces;
 	}
+	public List<Board> GetBoards()
+	{
+		return GetBoards(BoardStatus.All);
+	}
 	// TODO: Implementation will depend on the data structure used to represent
-	//		 multiverse layouts. Impelement this
-	public virtual List<Board> GetBoards()
+	//		 multiverse layouts. Implement this.
+
+	// I think we will always get boards of given status regardless of color, the
+	// reason being is there are tangible ways to speed up specifically getting
+	// active or playable boards.
+	public virtual List<Board> GetBoards(BoardStatus status)
 	{
 		Debug.LogWarning("MVTime GetBoard() not implemented");
 		return null;

@@ -12,9 +12,11 @@ public class Piece
         this.type = type;
         this.color = color;
         hasMoved = false;
+        isGhost = false;
     }
 
     public PieceType type;
     public int color;
-    bool hasMoved;
+    public bool hasMoved;
+    public bool isGhost; // used to implement en passant
 }

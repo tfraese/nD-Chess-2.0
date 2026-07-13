@@ -16,10 +16,13 @@ public class PermutableSet : MoveSet
 		base.setType = SetType.Permutable; // for identifying child class type
 		this.permutables = permutables; // non-zero components to permute
 	}
-	public override void Generate(BoardLayout layout)
+
+	// TODO: See how much of this i can factor out into the parent class
+	public override void Generate(Game game)
 	{
 		// Call base virtual function to initialize the moveset list
-		base.Generate(layout);
+		base.Generate(game);
+		BoardLayout layout = game.variant.boardLayout;
 
 		// Calculate the dimensionality of the move vectors to generate, as well as
 		// the number of non-zero components to use

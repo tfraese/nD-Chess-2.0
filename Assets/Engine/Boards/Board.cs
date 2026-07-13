@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,14 @@ public enum BoardTypes
 	HyperToroidal,
 	Klein
 }
+public enum BoardStatus
+{
+	Active,
+	Playable,
+	Determined,
+	All
+}
+
 
 /// <summary>
 /// Abstract class that holds the state of a given board.
@@ -30,6 +39,14 @@ public class Board
 
 	// Board state will update over time with changes to board
 	protected BoardState state;
+
+	// Board Players turn
+	int playersTurn;
+
+	// an array of associated moves available to each piece on the board.
+	// we store this locally so that we can move the board forward in a timeline
+	// and only modify the moves that have been made (eventually)
+	public List<MoveUX>[] movesOnBoard;
 
 	/// <summary>
 	/// Creates a new board, and copies the type, dimensions, and board state data
